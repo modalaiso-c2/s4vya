@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navbar } from '@/components/Layout/Navbar';
+import { MobileNav } from '@/components/Layout/MobileNav';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Lightbulb, TrendingUp, AlertCircle, Award } from 'lucide-react';
@@ -155,37 +156,37 @@ const Insights = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto p-6 space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Conseils IA</h1>
-          <p className="text-muted-foreground">
+      <main className="container mx-auto p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 pb-20 md:pb-6">
+        <div className="space-y-1 md:space-y-2">
+          <h1 className="text-2xl md:text-3xl font-bold">Conseils IA</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
             Analyse intelligente de vos finances et recommandations personnalisées
           </p>
         </div>
 
         <Card className="shadow-elegant gradient-primary text-white">
           <CardHeader>
-            <CardTitle className="text-white">Résumé du mois</CardTitle>
+            <CardTitle className="text-white text-base md:text-lg">Résumé du mois</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <CardContent className="space-y-3 md:space-y-4">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
               <div>
-                <p className="text-white/80 text-sm">Revenus totaux</p>
-                <p className="text-2xl font-bold">{totalIncome.toFixed(2)} €</p>
+                <p className="text-white/80 text-xs md:text-sm">Revenus totaux</p>
+                <p className="text-xl md:text-2xl font-bold">{totalIncome.toFixed(2)} €</p>
               </div>
               <div>
-                <p className="text-white/80 text-sm">Dépenses totales</p>
-                <p className="text-2xl font-bold">{totalExpense.toFixed(2)} €</p>
+                <p className="text-white/80 text-xs md:text-sm">Dépenses totales</p>
+                <p className="text-xl md:text-2xl font-bold">{totalExpense.toFixed(2)} €</p>
               </div>
             </div>
-            <div className="pt-4 border-t border-white/20">
-              <p className="text-white/80 text-sm">Solde</p>
-              <p className="text-3xl font-bold">{(totalIncome - totalExpense).toFixed(2)} €</p>
+            <div className="pt-3 md:pt-4 border-t border-white/20">
+              <p className="text-white/80 text-xs md:text-sm">Solde</p>
+              <p className="text-2xl md:text-3xl font-bold">{(totalIncome - totalExpense).toFixed(2)} €</p>
             </div>
           </CardContent>
         </Card>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {insights.map((insight, index) => {
             const Icon = insight.icon;
             return (
@@ -200,9 +201,9 @@ const Insights = () => {
                 }`}
               >
                 <CardHeader>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2 md:gap-3">
                     <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                      className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-lg flex-shrink-0 ${
                         insight.type === 'achievement'
                           ? 'bg-success/10 text-success'
                           : insight.type === 'warning'
@@ -210,15 +211,15 @@ const Insights = () => {
                           : 'bg-primary/10 text-primary'
                       }`}
                     >
-                      <Icon className="h-5 w-5" />
+                      <Icon className="h-4 w-4 md:h-5 md:w-5" />
                     </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-base">{insight.title}</CardTitle>
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-sm md:text-base">{insight.title}</CardTitle>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">{insight.description}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{insight.description}</p>
                 </CardContent>
               </Card>
             );
@@ -227,20 +228,21 @@ const Insights = () => {
 
         <Card className="shadow-elegant">
           <CardHeader>
-            <CardTitle>Besoin d'aide ?</CardTitle>
+            <CardTitle className="text-base md:text-lg">Besoin d'aide ?</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
+          <CardContent className="space-y-3 md:space-y-4">
+            <p className="text-sm md:text-base text-muted-foreground">
               Ces conseils sont générés automatiquement en analysant vos transactions.
               Pour des recommandations plus personnalisées, continuez à enregistrer vos dépenses régulièrement.
             </p>
-            <Button onClick={fetchData}>
+            <Button onClick={fetchData} className="w-full sm:w-auto">
               <Lightbulb className="mr-2 h-4 w-4" />
               Actualiser les conseils
             </Button>
           </CardContent>
         </Card>
       </main>
+      <MobileNav />
     </div>
   );
 };

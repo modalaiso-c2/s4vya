@@ -24,13 +24,13 @@ export const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-      <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-8">
-          <NavLink to="/dashboard" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary">
-              <span className="text-lg font-bold text-white">S</span>
+      <div className="container flex h-14 md:h-16 items-center justify-between px-3 md:px-4">
+        <div className="flex items-center gap-3 md:gap-8 flex-1">
+          <NavLink to="/dashboard" className="flex items-center gap-1.5 md:gap-2">
+            <div className="flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-lg gradient-primary">
+              <span className="text-base md:text-lg font-bold text-white">S</span>
             </div>
-            <span className="text-xl font-bold gradient-primary bg-clip-text text-transparent">
+            <span className="text-lg md:text-xl font-bold gradient-primary bg-clip-text text-transparent">
               Savya
             </span>
           </NavLink>
@@ -58,7 +58,7 @@ export const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 md:gap-2">
           <Button
             variant="ghost"
             size="icon"

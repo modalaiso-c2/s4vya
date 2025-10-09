@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navbar } from '@/components/Layout/Navbar';
+import { MobileNav } from '@/components/Layout/MobileNav';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -194,22 +195,24 @@ const Transactions = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto p-6 space-y-6">
-        <div className="flex items-center justify-between">
+      <main className="container mx-auto p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 pb-20 md:pb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-0">
           <div>
-            <h1 className="text-3xl font-bold">Transactions</h1>
-            <p className="text-muted-foreground">Gérez vos revenus et dépenses</p>
+            <h1 className="text-2xl md:text-3xl font-bold">Transactions</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Gérez vos revenus et dépenses</p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={exportToCSV}>
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button variant="outline" onClick={exportToCSV} className="flex-1 sm:flex-none">
               <Download className="mr-2 h-4 w-4" />
-              Export CSV
+              <span className="hidden sm:inline">Export CSV</span>
+              <span className="sm:hidden">Export</span>
             </Button>
             <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
               <DialogTrigger asChild>
-                <Button>
+                <Button className="flex-1 sm:flex-none">
                   <Plus className="mr-2 h-4 w-4" />
-                  Nouvelle transaction
+                  <span className="hidden sm:inline">Nouvelle transaction</span>
+                  <span className="sm:hidden">Ajouter</span>
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -321,55 +324,57 @@ const Transactions = () => {
 
         <Card className="shadow-elegant">
           <CardHeader>
-            <CardTitle>Toutes les transactions</CardTitle>
+            <CardTitle className="text-base md:text-lg">Toutes les transactions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
+            <div className="space-y-2 md:space-y-3">
               {transactions.length > 0 ? (
                 transactions.map((transaction) => {
                   const category = categories.find(c => c.id === transaction.category_id);
                   return (
                     <div
                       key={transaction.id}
-                      className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted transition-smooth"
+                      className="flex items-start sm:items-center justify-between p-3 md:p-4 rounded-lg bg-muted/50 hover:bg-muted transition-smooth gap-2"
                     >
-                      <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-background">
-                          <span className="text-2xl">{category?.icon || '💰'}</span>
+                      <div className="flex items-start sm:items-center gap-2 md:gap-4 flex-1 min-w-0">
+                        <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-lg bg-background flex-shrink-0">
+                          <span className="text-xl md:text-2xl">{category?.icon || '💰'}</span>
                         </div>
-                        <div>
-                          <p className="font-medium">{transaction.title}</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium text-sm md:text-base">{transaction.title}</p>
+                          <p className="text-xs md:text-sm text-muted-foreground">
                             {new Date(transaction.date).toLocaleDateString('fr-FR')} • {category?.name}
                           </p>
                           {transaction.note && (
-                            <p className="text-xs text-muted-foreground mt-1">{transaction.note}</p>
+                            <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{transaction.note}</p>
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-4 flex-shrink-0">
                         <span
-                          className={`text-lg font-bold ${
+                          className={`text-base md:text-lg font-bold whitespace-nowrap ${
                             transaction.type === 'income' ? 'text-success' : 'text-destructive'
                           }`}
                         >
                           {transaction.type === 'income' ? '+' : '-'}
                           {Number(transaction.amount).toFixed(2)} €
                         </span>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 md:gap-2">
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => handleEdit(transaction)}
+                            className="h-8 w-8 md:h-10 md:w-10"
                           >
-                            <Pencil className="h-4 w-4" />
+                            <Pencil className="h-3.5 w-3.5 md:h-4 md:w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => handleDelete(transaction.id)}
+                            className="h-8 w-8 md:h-10 md:w-10"
                           >
-                            <Trash2 className="h-4 w-4 text-destructive" />
+                            <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-destructive" />
                           </Button>
                         </div>
                       </div>
@@ -385,6 +390,7 @@ const Transactions = () => {
           </CardContent>
         </Card>
       </main>
+      <MobileNav />
     </div>
   );
 };

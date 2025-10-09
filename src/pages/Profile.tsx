@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navbar } from '@/components/Layout/Navbar';
+import { MobileNav } from '@/components/Layout/MobileNav';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -118,18 +119,18 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto p-6 max-w-2xl">
-        <div className="space-y-6">
+      <main className="container mx-auto p-3 sm:p-4 md:p-6 max-w-2xl pb-20 md:pb-6">
+        <div className="space-y-4 md:space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">Mon Profil</h1>
-            <p className="text-muted-foreground">Gérez vos informations personnelles</p>
+            <h1 className="text-2xl md:text-3xl font-bold">Mon Profil</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Gérez vos informations personnelles</p>
           </div>
 
           <Card className="shadow-elegant">
             <CardHeader>
-              <CardTitle>Photo de profil</CardTitle>
+              <CardTitle className="text-base md:text-lg">Photo de profil</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center gap-4">
+            <CardContent className="flex flex-col items-center gap-3 md:gap-4">
               <Avatar className="h-32 w-32">
                 <AvatarImage src={profile.avatar_url} />
                 <AvatarFallback className="text-4xl">
@@ -162,10 +163,10 @@ const Profile = () => {
 
           <Card className="shadow-elegant">
             <CardHeader>
-              <CardTitle>Informations personnelles</CardTitle>
+              <CardTitle className="text-base md:text-lg">Informations personnelles</CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -214,6 +215,7 @@ const Profile = () => {
           </Card>
         </div>
       </main>
+      <MobileNav />
     </div>
   );
 };

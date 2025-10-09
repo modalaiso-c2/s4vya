@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navbar } from '@/components/Layout/Navbar';
+import { MobileNav } from '@/components/Layout/MobileNav';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUpRight, ArrowDownRight, Wallet, TrendingUp } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
@@ -98,61 +99,61 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto p-6 space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Vue d'ensemble de vos finances</p>
+      <main className="container mx-auto p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 pb-20 md:pb-6">
+        <div className="space-y-1 md:space-y-2">
+          <h1 className="text-2xl md:text-3xl font-bold">Dashboard</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Vue d'ensemble de vos finances</p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           <Card className="shadow-elegant transition-smooth hover:shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Solde Total</CardTitle>
-              <Wallet className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 md:pb-2">
+              <CardTitle className="text-xs md:text-sm font-medium">Solde Total</CardTitle>
+              <Wallet className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{balance.toFixed(2)} €</div>
-              <p className="text-xs text-muted-foreground mt-1">
+            <CardContent className="pb-3 md:pb-6">
+              <div className="text-xl md:text-2xl font-bold">{balance.toFixed(2)} €</div>
+              <p className="text-xs text-muted-foreground mt-0.5 md:mt-1">
                 {balance >= 0 ? 'Situation positive' : 'Attention aux dépenses'}
               </p>
             </CardContent>
           </Card>
 
           <Card className="shadow-elegant transition-smooth hover:shadow-lg border-l-4 border-l-success">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Revenus</CardTitle>
-              <ArrowUpRight className="h-4 w-4 text-success" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 md:pb-2">
+              <CardTitle className="text-xs md:text-sm font-medium">Revenus</CardTitle>
+              <ArrowUpRight className="h-3.5 w-3.5 md:h-4 md:w-4 text-success" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-success">{totalIncome.toFixed(2)} €</div>
-              <p className="text-xs text-muted-foreground mt-1">
+            <CardContent className="pb-3 md:pb-6">
+              <div className="text-xl md:text-2xl font-bold text-success">{totalIncome.toFixed(2)} €</div>
+              <p className="text-xs text-muted-foreground mt-0.5 md:mt-1">
                 Ce mois
               </p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-elegant transition-smooth hover:shadow-lg border-l-4 border-l-destructive">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Dépenses</CardTitle>
-              <ArrowDownRight className="h-4 w-4 text-destructive" />
+          <Card className="shadow-elegant transition-smooth hover:shadow-lg border-l-4 border-l-destructive sm:col-span-2 md:col-span-1">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 md:pb-2">
+              <CardTitle className="text-xs md:text-sm font-medium">Dépenses</CardTitle>
+              <ArrowDownRight className="h-3.5 w-3.5 md:h-4 md:w-4 text-destructive" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-destructive">{totalExpense.toFixed(2)} €</div>
-              <p className="text-xs text-muted-foreground mt-1">
+            <CardContent className="pb-3 md:pb-6">
+              <div className="text-xl md:text-2xl font-bold text-destructive">{totalExpense.toFixed(2)} €</div>
+              <p className="text-xs text-muted-foreground mt-0.5 md:mt-1">
                 Ce mois
               </p>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-2">
           <Card className="shadow-elegant">
             <CardHeader>
-              <CardTitle>Dépenses par catégorie</CardTitle>
+              <CardTitle className="text-base md:text-lg">Dépenses par catégorie</CardTitle>
             </CardHeader>
             <CardContent>
               {categoryData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={280}>
                   <PieChart>
                     <Pie
                       data={categoryData}
@@ -172,7 +173,7 @@ const Dashboard = () => {
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+                <div className="flex items-center justify-center h-[280px] text-sm text-muted-foreground">
                   Aucune dépense enregistrée
                 </div>
               )}
@@ -181,28 +182,28 @@ const Dashboard = () => {
 
           <Card className="shadow-elegant">
             <CardHeader>
-              <CardTitle>Transactions récentes</CardTitle>
+              <CardTitle className="text-base md:text-lg">Transactions récentes</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 {recentTransactions.length > 0 ? (
                   recentTransactions.map((transaction) => {
                     const category = categories.find(c => c.id === transaction.category_id);
                     return (
-                      <div key={transaction.id} className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
-                            <span className="text-lg">{category?.icon || '💰'}</span>
+                      <div key={transaction.id} className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+                          <div className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-lg bg-muted flex-shrink-0">
+                            <span className="text-base md:text-lg">{category?.icon || '💰'}</span>
                           </div>
-                          <div>
-                            <p className="font-medium">{transaction.title}</p>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-sm md:text-base truncate">{transaction.title}</p>
                             <p className="text-xs text-muted-foreground">
                               {new Date(transaction.date).toLocaleDateString('fr-FR')}
                             </p>
                           </div>
                         </div>
                         <span
-                          className={`font-semibold ${
+                          className={`font-semibold text-sm md:text-base whitespace-nowrap ${
                             transaction.type === 'income'
                               ? 'text-success'
                               : 'text-destructive'
@@ -224,6 +225,7 @@ const Dashboard = () => {
           </Card>
         </div>
       </main>
+      <MobileNav />
     </div>
   );
 };
