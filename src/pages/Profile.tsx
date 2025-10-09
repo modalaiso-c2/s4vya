@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCurrency, CURRENCY_NAMES, Currency } from '@/contexts/CurrencyContext';
 import { Navbar } from '@/components/Layout/Navbar';
 import { MobileNav } from '@/components/Layout/MobileNav';
 import { Button } from '@/components/ui/button';
@@ -8,8 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Camera, Save } from 'lucide-react';
+import { Camera, Save, DollarSign } from 'lucide-react';
 
 interface ProfileData {
   username: string;
@@ -19,6 +21,7 @@ interface ProfileData {
 
 const Profile = () => {
   const { user } = useAuth();
+  const { currency, setCurrency } = useCurrency();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [profile, setProfile] = useState<ProfileData>({
@@ -211,6 +214,35 @@ const Profile = () => {
                   {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
                 </Button>
               </form>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-elegant">
+            <CardHeader>
+              <CardTitle className="text-base md:text-lg flex items-center gap-2">
+                <DollarSign className="h-5 w-5" />
+                Devise
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="currency">Devise par défaut</Label>
+                <Select value={currency} onValueChange={(value) => setCurrency(value as Currency)}>
+                  <SelectTrigger id="currency">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(CURRENCY_NAMES).map(([code, name]) => (
+                      <SelectItem key={code} value={code}>
+                        {name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  Cette devise sera utilisée pour afficher tous les montants
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>

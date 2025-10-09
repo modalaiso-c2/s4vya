@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 import { Navbar } from '@/components/Layout/Navbar';
 import { MobileNav } from '@/components/Layout/MobileNav';
 import { Button } from '@/components/ui/button';
@@ -32,6 +33,7 @@ interface Category {
 
 const Transactions = () => {
   const { user } = useAuth();
+  const { formatAmount } = useCurrency();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -272,7 +274,7 @@ const Transactions = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Montant (€)</Label>
+                      <Label>Montant</Label>
                       <Input
                         type="number"
                         step="0.01"
@@ -357,7 +359,7 @@ const Transactions = () => {
                           }`}
                         >
                           {transaction.type === 'income' ? '+' : '-'}
-                          {Number(transaction.amount).toFixed(2)} €
+                          {formatAmount(Number(transaction.amount))}
                         </span>
                         <div className="flex gap-1 md:gap-2">
                           <Button

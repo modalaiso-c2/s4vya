@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 import { Navbar } from '@/components/Layout/Navbar';
 import { MobileNav } from '@/components/Layout/MobileNav';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,6 +27,7 @@ interface Category {
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const { formatAmount } = useCurrency();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -112,7 +114,7 @@ const Dashboard = () => {
               <Wallet className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent className="pb-3 md:pb-6">
-              <div className="text-xl md:text-2xl font-bold">{balance.toFixed(2)} €</div>
+              <div className="text-xl md:text-2xl font-bold">{formatAmount(balance)}</div>
               <p className="text-xs text-muted-foreground mt-0.5 md:mt-1">
                 {balance >= 0 ? 'Situation positive' : 'Attention aux dépenses'}
               </p>
@@ -125,7 +127,7 @@ const Dashboard = () => {
               <ArrowUpRight className="h-3.5 w-3.5 md:h-4 md:w-4 text-success" />
             </CardHeader>
             <CardContent className="pb-3 md:pb-6">
-              <div className="text-xl md:text-2xl font-bold text-success">{totalIncome.toFixed(2)} €</div>
+              <div className="text-xl md:text-2xl font-bold text-success">{formatAmount(totalIncome)}</div>
               <p className="text-xs text-muted-foreground mt-0.5 md:mt-1">
                 Ce mois
               </p>
@@ -138,7 +140,7 @@ const Dashboard = () => {
               <ArrowDownRight className="h-3.5 w-3.5 md:h-4 md:w-4 text-destructive" />
             </CardHeader>
             <CardContent className="pb-3 md:pb-6">
-              <div className="text-xl md:text-2xl font-bold text-destructive">{totalExpense.toFixed(2)} €</div>
+              <div className="text-xl md:text-2xl font-bold text-destructive">{formatAmount(totalExpense)}</div>
               <p className="text-xs text-muted-foreground mt-0.5 md:mt-1">
                 Ce mois
               </p>
@@ -210,7 +212,7 @@ const Dashboard = () => {
                           }`}
                         >
                           {transaction.type === 'income' ? '+' : '-'}
-                          {Number(transaction.amount).toFixed(2)} €
+                          {formatAmount(Number(transaction.amount))}
                         </span>
                       </div>
                     );

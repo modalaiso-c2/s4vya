@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 import { Navbar } from '@/components/Layout/Navbar';
 import { MobileNav } from '@/components/Layout/MobileNav';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,6 +24,7 @@ interface Insight {
 
 const Insights = () => {
   const { user } = useAuth();
+  const { formatAmount } = useCurrency();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<Insight[]>([]);
@@ -87,7 +89,7 @@ const Insights = () => {
       newInsights.push({
         type: 'tip',
         title: 'Optimisez vos dépenses',
-        description: `Votre dépense moyenne est de ${avgExpense.toFixed(2)}€. Identifiez les achats récurrents que vous pourriez réduire.`,
+        description: `Votre dépense moyenne est de ${formatAmount(avgExpense)}. Identifiez les achats récurrents que vous pourriez réduire.`,
         icon: Lightbulb,
       });
     }
@@ -172,16 +174,16 @@ const Insights = () => {
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               <div>
                 <p className="text-white/80 text-xs md:text-sm">Revenus totaux</p>
-                <p className="text-xl md:text-2xl font-bold">{totalIncome.toFixed(2)} €</p>
+                <p className="text-xl md:text-2xl font-bold">{formatAmount(totalIncome)}</p>
               </div>
               <div>
                 <p className="text-white/80 text-xs md:text-sm">Dépenses totales</p>
-                <p className="text-xl md:text-2xl font-bold">{totalExpense.toFixed(2)} €</p>
+                <p className="text-xl md:text-2xl font-bold">{formatAmount(totalExpense)}</p>
               </div>
             </div>
             <div className="pt-3 md:pt-4 border-t border-white/20">
               <p className="text-white/80 text-xs md:text-sm">Solde</p>
-              <p className="text-2xl md:text-3xl font-bold">{(totalIncome - totalExpense).toFixed(2)} €</p>
+              <p className="text-2xl md:text-3xl font-bold">{formatAmount(totalIncome - totalExpense)}</p>
             </div>
           </CardContent>
         </Card>
