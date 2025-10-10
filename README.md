@@ -1,73 +1,65 @@
-# Welcome to your Lovable project
+# 💙 Savya — Application Web de Gestion Financière Intelligente
 
-## Project info
+Savya est une application web moderne qui aide les utilisateurs à **gérer leur budget, suivre leurs dépenses** et **analyser leurs finances** grâce à une interface claire, minimaliste et intuitive.
 
-**URL**: https://lovable.dev/projects/e069027f-b279-4301-ad5d-2c1f286ca8ef
+> 🚀 Développée avec **React + TypeScript + TailwindCSS + shadcn-ui**, propulsée par **Lovable**.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🌐 Liens utiles
 
-**Use Lovable**
+- **Projet Lovable :** [Ouvrir dans Lovable](https://lovable.dev/projects/e069027f-b279-4301-ad5d-2c1f286ca8ef)
+- **Dépôt GitHub :** [github.com/modalaiso/savya](https://github.com/modalaiso/savya)
+- **Dépôt original :** [github.com/modalaiso-c2/s4vya](https://github.com/modalaiso-c2/s4vya)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e069027f-b279-4301-ad5d-2c1f286ca8ef) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## ✨ Fonctionnalités principales
 
-**Use your preferred IDE**
+- 🧾 **Suivi des dépenses et revenus**
+- 📊 **Tableau de bord interactif** avec statistiques et graphiques
+- 🔎 **Filtrage et recherche des transactions**
+- 🤖 **Analyse IA simulée** (conseils financiers basés sur les données locales)
+- 🌗 **Mode clair / sombre**
+- 👤 **Système de compte utilisateur** : création, connexion, déconnexion, édition du profil et photo de profil
+- ☁️ **Connexion Google via Firebase**
+- 💾 **Sauvegarde locale (localStorage)** pour les données utilisateur
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🧩 Stack technique
 
-Follow these steps:
+| Technologie | Rôle |
+|--------------|------|
+| **React** | Framework frontend |
+| **TypeScript** | Typage statique pour un code robuste |
+| **Tailwind CSS** | Design rapide et responsive |
+| **shadcn-ui** | Composants UI modernes |
+| **Vite** | Outil de build et développement ultra-rapide |
+| **Firebase** | Authentification et base de données |
+| **Framer Motion** | Animations fluides et naturelles |
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## ⚙️ Installation locale
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 🧰 Prérequis
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+- [Node.js](https://nodejs.org/) ≥ 18  
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)  
+- (Optionnel) [Git](https://git-scm.com/) pour cloner le projet
+
+### 🚀 Étapes
+
+```bash
+# 1. Cloner le dépôt
+git clone https://github.com/modalaiso/savya.git
+
+# 2. Se rendre dans le dossier
+cd savya
+
+# 3. Installer les dépendances
+npm install
+
+# 4. Lancer le serveur de développement
 npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/e069027f-b279-4301-ad5d-2c1f286ca8ef) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
