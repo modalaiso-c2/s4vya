@@ -159,7 +159,7 @@ const Auth = () => {
                     id="signup-username"
                     name="username"
                     type="text"
-                    placeholder="johndoe"
+                    placeholder="modalaiso"
                     required
                   />
                 </div>
@@ -169,7 +169,7 @@ const Auth = () => {
                     id="signup-fullName"
                     name="fullName"
                     type="text"
-                    placeholder="John Doe"
+                    placeholder="Israel Mobio"
                   />
                 </div>
                 <div className="space-y-2">
