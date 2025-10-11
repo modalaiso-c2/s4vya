@@ -11,6 +11,8 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Insights from "./pages/Insights";
+import Analysis from "./pages/Analysis";
+import SavingsPlan from "./pages/SavingsPlan";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
@@ -49,6 +51,22 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Insights />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/analysis"
+                element={
+                  <ProtectedRoute>
+                    <Analysis />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/savings"
+                element={
+                  <ProtectedRoute>
+                    <SavingsPlan />
                   </ProtectedRoute>
                 }
               />

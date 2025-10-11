@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Moon, Sun, LogOut, User, LayoutDashboard, Receipt, Lightbulb } from 'lucide-react';
+import { Moon, Sun, LogOut, User, LayoutDashboard, Receipt, Lightbulb, PieChart, Target } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,8 @@ export const Navbar = () => {
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/transactions', label: 'Transactions', icon: Receipt },
     { to: '/insights', label: 'Conseils IA', icon: Lightbulb },
+    { to: '/analysis', label: 'Analyse', icon: PieChart },
+    { to: '/savings', label: 'Épargne', icon: Target },
   ];
 
   return (

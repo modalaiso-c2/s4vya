@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Lightbulb, User } from 'lucide-react';
+import { LayoutDashboard, Receipt, PieChart, Target, User } from 'lucide-react';
 
 export const MobileNav = () => {
   const navItems = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/transactions', label: 'Transactions', icon: Receipt },
-    { to: '/insights', label: 'Conseils', icon: Lightbulb },
+    { to: '/analysis', label: 'Analyse', icon: PieChart },
+    { to: '/savings', label: 'Épargne', icon: Target },
     { to: '/profile', label: 'Profil', icon: User },
   ];
 
