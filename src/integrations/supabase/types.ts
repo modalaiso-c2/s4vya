@@ -160,6 +160,45 @@ export type Database = {
           },
         ]
       }
+      user_badges: {
+        Row: {
+          amount_achieved: number | null
+          badge_color: string
+          badge_description: string
+          badge_icon: string
+          badge_name: string
+          badge_type: string
+          created_at: string
+          date_earned: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          amount_achieved?: number | null
+          badge_color?: string
+          badge_description: string
+          badge_icon: string
+          badge_name: string
+          badge_type: string
+          created_at?: string
+          date_earned?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          amount_achieved?: number | null
+          badge_color?: string
+          badge_description?: string
+          badge_icon?: string
+          badge_name?: string
+          badge_type?: string
+          created_at?: string
+          date_earned?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
