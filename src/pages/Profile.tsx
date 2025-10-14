@@ -4,14 +4,17 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useCurrency, CURRENCY_NAMES, Currency } from '@/contexts/CurrencyContext';
 import { Navbar } from '@/components/Layout/Navbar';
 import { MobileNav } from '@/components/Layout/MobileNav';
+import { UserBadges } from '@/components/UserBadges';
+import { CategoryManager } from '@/components/CategoryManager';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Camera, Save, DollarSign } from 'lucide-react';
+import { Camera, Save, DollarSign, Award, Settings } from 'lucide-react';
 
 interface ProfileData {
   username: string;
@@ -122,129 +125,156 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto p-3 sm:p-4 md:p-6 max-w-2xl pb-20 md:pb-6">
+      <main className="container mx-auto p-3 sm:p-4 md:p-6 max-w-4xl pb-20 md:pb-6">
         <div className="space-y-4 md:space-y-6">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">Mon Profil</h1>
-            <p className="text-sm md:text-base text-muted-foreground">Gérez vos informations personnelles</p>
+            <p className="text-sm md:text-base text-muted-foreground">Gérez vos informations personnelles, badges et catégories</p>
           </div>
 
-          <Card className="shadow-elegant">
-            <CardHeader>
-              <CardTitle className="text-base md:text-lg">Photo de profil</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center gap-3 md:gap-4">
-              <Avatar className="h-32 w-32">
-                <AvatarImage src={profile.avatar_url} />
-                <AvatarFallback className="text-4xl">
-                  {profile.username?.[0]?.toUpperCase() || 'U'}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <Input
-                  id="avatar"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleAvatarUpload}
-                  disabled={uploading}
-                />
-                <Label htmlFor="avatar">
-                  <Button
-                    variant="outline"
-                    disabled={uploading}
-                    onClick={() => document.getElementById('avatar')?.click()}
-                    type="button"
-                  >
-                    <Camera className="mr-2 h-4 w-4" />
-                    {uploading ? 'Téléchargement...' : 'Changer la photo'}
-                  </Button>
-                </Label>
-              </div>
-            </CardContent>
-          </Card>
+          <Tabs defaultValue="profile" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="profile" className="flex items-center gap-2">
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Profil</span>
+              </TabsTrigger>
+              <TabsTrigger value="badges" className="flex items-center gap-2">
+                <Award className="h-4 w-4" />
+                <span className="hidden sm:inline">Badges</span>
+              </TabsTrigger>
+              <TabsTrigger value="categories" className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                <span className="hidden sm:inline">Catégories</span>
+              </TabsTrigger>
+            </TabsList>
 
-          <Card className="shadow-elegant">
-            <CardHeader>
-              <CardTitle className="text-base md:text-lg">Informations personnelles</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={user?.email || ''}
-                    disabled
-                    className="bg-muted"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    L'email ne peut pas être modifié
-                  </p>
-                </div>
+            <TabsContent value="profile" className="space-y-4 md:space-y-6">
+              <Card className="shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="text-base md:text-lg">Photo de profil</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center gap-3 md:gap-4">
+                  <Avatar className="h-32 w-32">
+                    <AvatarImage src={profile.avatar_url} />
+                    <AvatarFallback className="text-4xl">
+                      {profile.username?.[0]?.toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <Input
+                      id="avatar"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAvatarUpload}
+                      disabled={uploading}
+                    />
+                    <Label htmlFor="avatar">
+                      <Button
+                        variant="outline"
+                        disabled={uploading}
+                        onClick={() => document.getElementById('avatar')?.click()}
+                        type="button"
+                      >
+                        <Camera className="mr-2 h-4 w-4" />
+                        {uploading ? 'Téléchargement...' : 'Changer la photo'}
+                      </Button>
+                    </Label>
+                  </div>
+                </CardContent>
+              </Card>
 
-                <div className="space-y-2">
-                  <Label htmlFor="username">Nom d'utilisateur</Label>
-                  <Input
-                    id="username"
-                    type="text"
-                    value={profile.username}
-                    onChange={(e) =>
-                      setProfile({ ...profile, username: e.target.value })
-                    }
-                    required
-                  />
-                </div>
+              <Card className="shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="text-base md:text-lg">Informations personnelles</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={user?.email || ''}
+                        disabled
+                        className="bg-muted"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        L'email ne peut pas être modifié
+                      </p>
+                    </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="fullName">Nom complet</Label>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    value={profile.full_name}
-                    onChange={(e) =>
-                      setProfile({ ...profile, full_name: e.target.value })
-                    }
-                  />
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="username">Nom d'utilisateur</Label>
+                      <Input
+                        id="username"
+                        type="text"
+                        value={profile.username}
+                        onChange={(e) =>
+                          setProfile({ ...profile, username: e.target.value })
+                        }
+                        required
+                      />
+                    </div>
 
-                <Button type="submit" disabled={loading} className="w-full">
-                  <Save className="mr-2 h-4 w-4" />
-                  {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName">Nom complet</Label>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        value={profile.full_name}
+                        onChange={(e) =>
+                          setProfile({ ...profile, full_name: e.target.value })
+                        }
+                      />
+                    </div>
 
-          <Card className="shadow-elegant">
-            <CardHeader>
-              <CardTitle className="text-base md:text-lg flex items-center gap-2">
-                <DollarSign className="h-5 w-5" />
-                Devise
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <Label htmlFor="currency">Devise par défaut</Label>
-                <Select value={currency} onValueChange={(value) => setCurrency(value as Currency)}>
-                  <SelectTrigger id="currency">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(CURRENCY_NAMES).map(([code, name]) => (
-                      <SelectItem key={code} value={code}>
-                        {name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-muted-foreground">
-                  Cette devise sera utilisée pour afficher tous les montants
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+                    <Button type="submit" disabled={loading} className="w-full">
+                      <Save className="mr-2 h-4 w-4" />
+                      {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="text-base md:text-lg flex items-center gap-2">
+                    <DollarSign className="h-5 w-5" />
+                    Devise
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <Label htmlFor="currency">Devise par défaut</Label>
+                    <Select value={currency} onValueChange={(value) => setCurrency(value as Currency)}>
+                      <SelectTrigger id="currency">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(CURRENCY_NAMES).map(([code, name]) => (
+                          <SelectItem key={code} value={code}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground">
+                      Cette devise sera utilisée pour afficher tous les montants
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="badges">
+              <UserBadges />
+            </TabsContent>
+
+            <TabsContent value="categories">
+              <CategoryManager />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
       <MobileNav />
