@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { Camera, Save, DollarSign, Award, Settings } from 'lucide-react';
+import { handleError } from '@/lib/errorHandler';
 
 interface ProfileData {
   username: string;
@@ -57,7 +58,7 @@ const Profile = () => {
         });
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      toast.error(handleError(error, 'Erreur lors du chargement du profil'));
     }
   };
 
@@ -77,8 +78,8 @@ const Profile = () => {
       if (error) throw error;
 
       toast.success('Profil mis à jour avec succès');
-    } catch (error: any) {
-      toast.error(error.message || 'Erreur lors de la mise à jour');
+    } catch (error) {
+      toast.error(handleError(error, 'Erreur lors de la mise à jour du profil'));
     } finally {
       setLoading(false);
     }
@@ -93,8 +94,26 @@ const Profile = () => {
       }
 
       const file = e.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user?.id}/${Math.random()}.${fileExt}`;
+      
+      // File validation
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+      
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error('La taille du fichier ne doit pas dépasser 5 Mo');
+        return;
+      }
+      
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        toast.error('Seuls les fichiers JPEG, PNG et WebP sont acceptés');
+        return;
+      }
+
+      // Generate secure filename with UUID-like structure
+      const fileExt = file.type.split('/')[1];
+      const timestamp = Date.now();
+      const random = Math.random().toString(36).substring(2, 15);
+      const fileName = `${user?.id}/${timestamp}-${random}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
@@ -115,8 +134,8 @@ const Profile = () => {
 
       setProfile({ ...profile, avatar_url: publicUrl });
       toast.success('Photo de profil mise à jour');
-    } catch (error: any) {
-      toast.error(error.message || 'Erreur lors du téléchargement');
+    } catch (error) {
+      toast.error(handleError(error, 'Erreur lors du téléchargement de la photo'));
     } finally {
       setUploading(false);
     }

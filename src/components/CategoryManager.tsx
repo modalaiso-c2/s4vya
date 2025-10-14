@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { EmojiPicker } from '@/components/ui/emoji-picker';
 import { toast } from 'sonner';
 import { Plus, Pencil, Trash2, Tag } from 'lucide-react';
+import { handleError } from '@/lib/errorHandler';
 
 interface Category {
   id: string;
@@ -61,8 +62,7 @@ export const CategoryManager = () => {
       if (error) throw error;
       setCategories((data || []) as Category[]);
     } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast.error('Erreur lors du chargement des catégories');
+      toast.error(handleError(error, 'Erreur lors du chargement des catégories'));
     } finally {
       setLoading(false);
     }
@@ -112,8 +112,7 @@ export const CategoryManager = () => {
       if (error.code === '23505') {
         toast.error('Une catégorie avec ce nom existe déjà');
       } else {
-        toast.error('Erreur lors de la sauvegarde');
-        console.error(error);
+        toast.error(handleError(error, 'Erreur lors de la sauvegarde'));
       }
     }
   };
@@ -136,8 +135,7 @@ export const CategoryManager = () => {
       if (error.code === '23503') {
         toast.error('Impossible de supprimer cette catégorie car elle est utilisée dans des transactions');
       } else {
-        toast.error('Erreur lors de la suppression');
-        console.error(error);
+        toast.error(handleError(error, 'Erreur lors de la suppression'));
       }
     }
   };

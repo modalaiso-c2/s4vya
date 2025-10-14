@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { handleError } from '@/lib/errorHandler';
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Email invalide" }),
@@ -51,11 +52,11 @@ const Auth = () => {
 
       toast.success('Connexion réussie !');
       navigate('/dashboard');
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
-        toast.error(error.message || 'Erreur de connexion');
+        toast.error(handleError(error, 'Erreur de connexion'));
       }
     } finally {
       setLoading(false);
@@ -91,11 +92,11 @@ const Auth = () => {
 
       toast.success('Compte créé avec succès !');
       navigate('/dashboard');
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
-        toast.error(error.message || 'Erreur lors de la création du compte');
+        toast.error(handleError(error, 'Erreur lors de la création du compte'));
       }
     } finally {
       setLoading(false);

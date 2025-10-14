@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { Plus, Pencil, Trash2, Download, Search } from 'lucide-react';
+import { handleError } from '@/lib/errorHandler';
 
 interface Transaction {
   id: string;
@@ -66,7 +67,7 @@ const Transactions = () => {
       if (transactionsRes.data) setTransactions(transactionsRes.data as Transaction[]);
       if (categoriesRes.data) setCategories(categoriesRes.data as Category[]);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      toast.error(handleError(error, 'Erreur lors du chargement des données'));
     } finally {
       setLoading(false);
     }
@@ -114,8 +115,8 @@ const Transactions = () => {
       fetchData();
       resetForm();
       setIsOpen(false);
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error) {
+      toast.error(handleError(error, 'Erreur lors de la sauvegarde de la transaction'));
     }
   };
 
@@ -125,8 +126,8 @@ const Transactions = () => {
       if (error) throw error;
       toast.success('Transaction supprimée');
       fetchData();
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error) {
+      toast.error(handleError(error, 'Erreur lors de la suppression'));
     }
   };
 
