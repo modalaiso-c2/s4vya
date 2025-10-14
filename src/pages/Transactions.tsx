@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { Plus, Pencil, Trash2, Download } from 'lucide-react';
+import { Plus, Pencil, Trash2, Download, Search } from 'lucide-react';
 
 interface Transaction {
   id: string;
@@ -39,6 +39,7 @@ const Transactions = () => {
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [formData, setFormData] = useState({
     title: '',
@@ -182,6 +183,20 @@ const Transactions = () => {
   };
 
   const filteredCategories = categories.filter(c => c.type === formData.type);
+
+  const filteredTransactions = transactions.filter(transaction => {
+    if (!searchQuery.trim()) return true;
+    
+    const query = searchQuery.toLowerCase();
+    const category = categories.find(c => c.id === transaction.category_id);
+    
+    return (
+      transaction.title.toLowerCase().includes(query) ||
+      transaction.note?.toLowerCase().includes(query) ||
+      transaction.amount.toString().includes(query) ||
+      category?.name.toLowerCase().includes(query)
+    );
+  });
 
   if (loading) {
     return (
@@ -329,9 +344,21 @@ const Transactions = () => {
             <CardTitle className="text-base md:text-lg">Toutes les transactions</CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="mb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Rechercher par titre, catégorie, montant ou note..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
             <div className="space-y-2 md:space-y-3">
-              {transactions.length > 0 ? (
-                transactions.map((transaction) => {
+              {filteredTransactions.length > 0 ? (
+                filteredTransactions.map((transaction) => {
                   const category = categories.find(c => c.id === transaction.category_id);
                   return (
                     <div
@@ -385,7 +412,7 @@ const Transactions = () => {
                 })
               ) : (
                 <div className="text-center py-12 text-muted-foreground">
-                  Aucune transaction. Commencez par en ajouter une !
+                  {searchQuery ? 'Aucune transaction trouvée.' : 'Aucune transaction. Commencez par en ajouter une !'}
                 </div>
               )}
             </div>

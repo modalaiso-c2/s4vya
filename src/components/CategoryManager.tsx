@@ -59,7 +59,7 @@ export const CategoryManager = () => {
         .order('name');
 
       if (error) throw error;
-      setCategories(data || []);
+      setCategories((data || []) as Category[]);
     } catch (error) {
       console.error('Error fetching categories:', error);
       toast.error('Erreur lors du chargement des catégories');
