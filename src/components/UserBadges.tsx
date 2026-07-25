@@ -32,13 +32,13 @@ export const UserBadges = () => {
 
   const fetchUserBadges = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('user_badges')
         .select('*')
         .order('date_earned', { ascending: false });
 
       if (error) throw error;
-      setBadges(data || []);
+      setBadges((data as UserBadge[]) || []);
     } catch (error) {
       console.error('Error fetching user badges:', error);
     } finally {
