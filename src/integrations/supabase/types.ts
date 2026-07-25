@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -159,45 +159,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      user_badges: {
-        Row: {
-          amount_achieved: number | null
-          badge_color: string
-          badge_description: string
-          badge_icon: string
-          badge_name: string
-          badge_type: string
-          created_at: string
-          date_earned: string
-          id: string
-          user_id: string
-        }
-        Insert: {
-          amount_achieved?: number | null
-          badge_color?: string
-          badge_description: string
-          badge_icon: string
-          badge_name: string
-          badge_type: string
-          created_at?: string
-          date_earned?: string
-          id?: string
-          user_id: string
-        }
-        Update: {
-          amount_achieved?: number | null
-          badge_color?: string
-          badge_description?: string
-          badge_icon?: string
-          badge_name?: string
-          badge_type?: string
-          created_at?: string
-          date_earned?: string
-          id?: string
-          user_id?: string
-        }
-        Relationships: []
       }
     }
     Views: {
