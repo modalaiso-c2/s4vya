@@ -45,6 +45,8 @@ interface Category {
 const Transactions = () => {
   const { user } = useAuth();
   const { formatAmount } = useCurrency();
+  const online = useOnlineStatus();
+
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,16 +69,47 @@ const Transactions = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const refresh = () => fetchData();
+    window.addEventListener(SYNC_EVENT, refresh);
+    return () => window.removeEventListener(SYNC_EVENT, refresh);
+  }, []);
+
+  const persistLocally = (nextTransactions: Transaction[], nextCategories = categories) => {
+    setTransactions(nextTransactions);
+    cacheSnapshot({ transactions: nextTransactions, categories: nextCategories });
+  };
+
+  const loadFromCache = async () => {
+    const snapshot = await readSnapshot();
+    if (snapshot) {
+      setTransactions((snapshot.transactions as Transaction[]) ?? []);
+      setCategories((snapshot.categories as Category[]) ?? []);
+    }
+  };
+
   const fetchData = async () => {
+    if (!navigator.onLine) {
+      await loadFromCache();
+      setLoading(false);
+      return;
+    }
+
     try {
       const [transactionsRes, categoriesRes] = await Promise.all([
         supabase.from('transactions').select('*').order('date', { ascending: false }),
         supabase.from('categories').select('*'),
       ]);
 
-      if (transactionsRes.data) setTransactions(transactionsRes.data as Transaction[]);
-      if (categoriesRes.data) setCategories(categoriesRes.data as Category[]);
+      if (transactionsRes.error || categoriesRes.error) throw transactionsRes.error || categoriesRes.error;
+
+      const nextTransactions = (transactionsRes.data as Transaction[]) ?? [];
+      const nextCategories = (categoriesRes.data as Category[]) ?? [];
+      setTransactions(nextTransactions);
+      setCategories(nextCategories);
+      cacheSnapshot({ transactions: nextTransactions, categories: nextCategories });
     } catch (error) {
+      await loadFromCache();
       toast.error(handleError(error, 'Erreur lors du chargement des données'));
     } finally {
       setLoading(false);
@@ -91,31 +124,49 @@ const Transactions = () => {
       return;
     }
 
+    const values = {
+      title: formData.title,
+      amount: parseFloat(formData.amount),
+      type: formData.type,
+      category_id: formData.category_id,
+      date: formData.date,
+      note: formData.note,
+    };
+
+    // Hors ligne : on enregistre localement et on synchronise plus tard
+    if (!online) {
+      const id = editingId ?? newLocalId();
+      const record: Transaction = { id, ...values };
+      await enqueue(
+        editingId
+          ? { op: 'update', id, payload: { ...record, user_id: user?.id ?? '' } }
+          : { op: 'insert', id, payload: { ...record, user_id: user?.id ?? '' } }
+      );
+      persistLocally(
+        editingId
+          ? transactions.map((t) => (t.id === id ? record : t))
+          : [record, ...transactions]
+      );
+      toast.success(
+        editingId
+          ? 'Transaction mise à jour hors ligne (synchronisation à la reconnexion)'
+          : 'Transaction enregistrée hors ligne (synchronisation à la reconnexion)'
+      );
+      resetForm();
+      setIsOpen(false);
+      return;
+    }
+
     try {
       if (editingId) {
-        const { error } = await supabase
-          .from('transactions')
-          .update({
-            title: formData.title,
-            amount: parseFloat(formData.amount),
-            type: formData.type,
-            category_id: formData.category_id,
-            date: formData.date,
-            note: formData.note,
-          })
-          .eq('id', editingId);
+        const { error } = await supabase.from('transactions').update(values).eq('id', editingId);
 
         if (error) throw error;
         toast.success('Transaction mise à jour');
       } else {
         const { error } = await supabase.from('transactions').insert({
           user_id: user?.id,
-          title: formData.title,
-          amount: parseFloat(formData.amount),
-          type: formData.type,
-          category_id: formData.category_id,
-          date: formData.date,
-          note: formData.note,
+          ...values,
         });
 
         if (error) throw error;
@@ -131,6 +182,13 @@ const Transactions = () => {
   };
 
   const handleDelete = async (id: string) => {
+    if (!online || isLocalId(id)) {
+      await enqueue({ op: 'delete', id });
+      persistLocally(transactions.filter((t) => t.id !== id));
+      toast.success('Transaction supprimée');
+      return;
+    }
+
     try {
       const { error } = await supabase.from('transactions').delete().eq('id', id);
       if (error) throw error;
@@ -140,6 +198,7 @@ const Transactions = () => {
       toast.error(handleError(error, 'Erreur lors de la suppression'));
     }
   };
+
 
   const handleEdit = (transaction: Transaction) => {
     setEditingId(transaction.id);
