@@ -14,6 +14,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { Plus, Pencil, Trash2, Download, Search } from 'lucide-react';
 import { handleError } from '@/lib/errorHandler';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { SYNC_EVENT } from '@/components/OfflineSync';
+import {
+  cacheSnapshot,
+  enqueue,
+  isLocalId,
+  newLocalId,
+  readSnapshot,
+} from '@/lib/offline/transactionQueue';
+
 
 interface Transaction {
   id: string;
