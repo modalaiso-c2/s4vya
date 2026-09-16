@@ -11,6 +11,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
+
 
 export const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -61,7 +63,9 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-1 md:gap-2">
+          <OfflineIndicator />
           <Button
+
             variant="ghost"
             size="icon"
             onClick={toggleTheme}

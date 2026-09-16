@@ -7,6 +7,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { OfflineSync } from "./components/OfflineSync";
+
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
@@ -27,8 +29,10 @@ const App = () => (
         <ThemeProvider>
           <AuthProvider>
             <CurrencyProvider>
+              <OfflineSync />
               <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
               <Route path="/auth" element={<Auth />} />
               <Route
                 path="/dashboard"
